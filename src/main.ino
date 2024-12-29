@@ -4,12 +4,11 @@
 #include <stdio.h>
 #include <avr/io.h>
 #include <avr/pgmspace.h>
-#include "lib/lcdarduino.h"
 #include <util/delay.h>
 
 // ADC-Daten
-volatile int adcHighByte = 0;
-volatile int adcLowByte = 0;
+volatile uint16_t adcHighByte = 0;
+volatile uint16_t adcLowByte = 0;
 
 // Menü- und LCD-Steuerung
 volatile unsigned char menuStatus = 1;
@@ -19,18 +18,18 @@ volatile char debounceFlag = 0;
 volatile char buttonLock = 0;
 
 // Dreieckssignal-Parameter
-volatile int triangleSignal1 = 0;
-volatile int triangleSignal2 = 2048; // 180 Grad Phasenverschiebung
-volatile int triangleStep = 1;
-volatile int maxSignalValue = 4095;
+volatile uint16_t triangleSignal1 = 0;
+volatile uint16_t triangleSignal2 = 2048; // 180 Grad Phasenverschiebung
+volatile double triangleStep = 1;
+volatile uint16_t maxSignalValue = 4095;
 
 // Filterparameter
-volatile int filterFrequency = 1000; // Beispielinitialwert
-volatile int filterGain = 1;         // Beispielinitialwert
+volatile double filterFrequency = 1; // Beispielinitialwert
+volatile double filterGain = 1;         // Beispielinitialwert
 
 // Aktualisierte Filterparameter
-volatile int updatedFrequency = 1000; // Beispielinitialwert
-volatile int updatedGain = 1;         // Beispielinitialwert
+volatile double updatedFrequency = 1; // Beispielinitialwert
+volatile double updatedGain = 1;         // Beispielinitialwert
 
 // Filterkoeffizienten
 volatile float a0 = 0.0;
@@ -39,6 +38,12 @@ volatile float b1 = 0.0;
 // Ausgangswerte
 volatile float previousOutput = 0.0;
 volatile float currentOutput = 0.0;
+
+const int numReadings = 10; // Number of readings for averaging
+unsigned long readings[numReadings]; // Array to store readings
+int readIndex = 0; // Current index in the array
+unsigned long total = 0; // Sum of readings
+unsigned long average = 0; // Average value
 
 // SPI-Interrupt-Service-Routine
 ISR(SPI_STC_vect) {
@@ -50,6 +55,36 @@ int readAnalogPK0() {
     ADCSRA |= (1 << ADSC); // Start der ADC-Konvertierung
     while (ADCSRA & (1 << ADSC)); // Warten, bis die Konvertierung abgeschlossen ist
     return ADC;
+}
+
+unsigned long customPulseIn(uint8_t pin, uint8_t state, unsigned long timeout) {
+    unsigned long width = 0;
+    unsigned long start = micros();
+
+    // Warte, bis der Pin den gewünschten Zustand erreicht
+    while (digitalRead(pin) != state) {
+        if (micros() - start > timeout) {
+            return 0; // Timeout erreicht
+        }
+    }
+
+    // Startzeit des Pulses
+    unsigned long pulseStart = micros();
+
+    // Warte, bis der Pin den gegenteiligen Zustand erreicht
+    while (digitalRead(pin) == state) {
+        if (micros() - start > timeout) {
+            return 0; // Timeout erreicht
+        }
+    }
+
+    // Endzeit des Pulses
+    unsigned long pulseEnd = micros();
+
+    // Berechne die Pulsbreite
+    width = pulseEnd - pulseStart;
+
+    return width;
 }
 
 // Timer0 Compare Match A Interrupt für den Abtastzyklus
@@ -73,7 +108,7 @@ ISR (TIMER0_COMPA_vect) {
     }
 
     // Lesen des analogen Werts von PK0
-    int analogValue = readAnalogPK0();
+    uint16_t analogValue = readAnalogPK0();
 
     // Übertragung des analogen Werts von PK0 zum ersten DAC
     PORTA &= ~(1 << PA0);  // DAC1 Chip Select aktivieren
@@ -91,13 +126,7 @@ ISR (TIMER0_COMPA_vect) {
     while (!(SPSR & (1 << SPIF)));
     PORTA |= (1 << PA2);  // DAC2 Chip Select deaktivieren
 
-    // Übertragung des Dreieckssignals 2 zum dritten DAC
-    PORTA &= ~(1 << PA3);  // DAC3 Chip Select aktivieren
-    SPDR = (0b00010000) | ((triangleSignal2 >> 8) & 0x0F);  // Oberen 4 Bits senden
-    while (!(SPSR & (1 << SPIF)));
-    SPDR = triangleSignal2 & 0xFF;  // Unteren 8 Bits senden
-    while (!(SPSR & (1 << SPIF)));
-    PORTA |= (1 << PA3);  // DAC3 Chip Select deaktivieren
+
 
     // Latch-Ausgang setzen und zurücksetzen
     PORTA &= ~(1 << PA1);
@@ -105,6 +134,14 @@ ISR (TIMER0_COMPA_vect) {
 }
 
 void setup() {
+    Serial.begin(9600);
+    pinMode(2, INPUT);
+
+    // Initialize the readings array to 0
+    for (int i = 0; i < numReadings; i++) {
+        readings[i] = 0;
+    }
+
     // Initialisierung der Ports
     DDRB = 0x07; // Setze PB0, PB1, PB2 als Ausgänge
     DDRA = 0x0F; // Setze PA0, PA1, PA2 und PA3 als Ausgänge
@@ -135,76 +172,62 @@ void setup() {
     PORTA |= (1 << PA3);
     PORTB &= ~(1 << PB2); // MOSI initialisieren
 
-    // LCD initialisieren und Startwerte anzeigen
-    lcd_init(LCD_DISP_ON_CURSOR);
-    lcd_clrscr();
-    sprintf(displayBuffer, "Frq: %d s-1", int(filterFrequency));
-    lcd_puts(displayBuffer);
-    sprintf(displayBuffer, "\nGain: %d", int(filterGain));
-    lcd_puts(displayBuffer);
+    // Dreieckssignal-Parameter anpassen
+    triangleStep = 1; // Reduziere den Schritt um den Faktor 10
 }
 
 void loop() {
-    lcd_home();
-
     // Temporäre Variablen für die Eingabe
-    static int tempFrequency = filterFrequency;
-    static int tempGain = filterGain;
+    static double tempFrequency = filterFrequency;
+    static double tempGain = filterGain;
 
-    // Tastenabfrage zur Steuerung von Frequenz und Gain
-    char buttonPress = get_button();
-    switch (buttonPress) {
-        case button_up:
-            if (buttonLock == 0) {
-                tempGain++; buttonLock = 1; previousMenuStatus = 0;
-            } break;
-        case button_down:
-            if (buttonLock == 0) {
-                tempGain--; buttonLock = 1; previousMenuStatus = 0;
-            } break;
-        case button_left:
-            if (buttonLock == 0) {
-                tempFrequency--; buttonLock = 1; previousMenuStatus = 0;
-            } break;
-        case button_right:
-            if (buttonLock == 0) {
-                tempFrequency++; buttonLock = 1; previousMenuStatus = 0;
-            } break;
-        case button_ok:
-            if (buttonLock == 0) {
-                filterFrequency = tempFrequency;
-                if (tempGain < 0) tempGain = 0;
-                filterGain = tempGain;
-                buttonLock = 1; previousMenuStatus = 2;
-            } break;
-        default: buttonLock = 0; break;
-    }
+    // Aktualisierte Filterparameter anwenden
+    updatedFrequency = filterFrequency;
+    updatedGain = filterGain;
 
-    // LCD-Anzeige aktualisieren, wenn Menü geändert wurde
-    if (menuStatus != previousMenuStatus) {
-        if (previousMenuStatus == 0) {
-            sprintf(displayBuffer, "Frq: %d s-1", int(tempFrequency));
-            lcd_puts(displayBuffer);
-            sprintf(displayBuffer, "\nGain: %d", int(tempGain));
-            lcd_puts(displayBuffer);
-            previousMenuStatus = 1;
-        }
+    // Berechnen der neuen Tiefpass-Koeffizienten
+    a0 = (1 / updatedFrequency) / (0.001 + 1 / updatedFrequency);
+    b1 = (0.001) / (0.001 + 1 / updatedFrequency);
 
-        // Aktualisierte Filterparameter anwenden
-        if (previousMenuStatus == 2) {
-            updatedFrequency = filterFrequency;
-            updatedGain = filterGain;
-
-            // Berechnen der neuen Tiefpass-Koeffizienten
-            a0 = (1 / updatedFrequency) / (0.001 + 1 / updatedFrequency);
-            b1 = (0.001) / (0.001 + 1 / updatedFrequency);
-
-            previousOutput = currentOutput;
-            previousMenuStatus = 1;
-        }
-    }
+    previousOutput = currentOutput;
 
     // Timer0-Konfiguration für die neue Frequenz
     TCCR0B = 3 << CS00;   // Prescaler=64
     OCR0A = (16000000 / (64 * filterFrequency)) - 1; // Zählerwert für die neue Frequenz
+
+    // Subtract the last reading from the total
+    total = total - readings[readIndex];
+
+    // Take a new reading
+    readings[readIndex] = pulseIn(2, LOW, 3000000); // Use a smaller value
+
+    // Add the new reading to the total
+    total = total + readings[readIndex];
+
+    // Advance to the next position in the array
+    readIndex = readIndex + 1;
+
+    // If we're at the end of the array, wrap around to the beginning
+    if (readIndex >= numReadings) {
+        readIndex = 0;
+    }
+
+    // Calculate the average
+    average = (total / numReadings - 6700) * 7.8;
+
+    if (average <= 6) {
+        average = 0;
+    }
+
+    // Print the average duration
+    Serial.println(average);
+
+    // Übertragung des average-Signals zum dritten DAC
+    PORTA &= ~(1 << PA3);  // DAC3 Chip Select aktivieren
+    SPDR = (0b00010000) | ((average >> 8) & 0x0F);  // Oberen 4 Bits senden
+    while (!(SPSR & (1 << SPIF)));
+    SPDR = average & 0xFF;  // Unteren 8 Bits senden
+    while (!(SPSR & (1 << SPIF)));
+    PORTA |= (1 << PA3);  // DAC3 Chip Select deaktivieren
+
 }
