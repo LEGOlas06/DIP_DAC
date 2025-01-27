@@ -1,233 +1,204 @@
+#define TIMER3_A_PIN 2  // Define the pin for TIMER3
 #include <Arduino.h>
+#include <SoftwareSerial.h>
 #include <avr/interrupt.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 #include <util/delay.h>
+#include <ServoTimer2.h>  // Include the ServoTimer2 library instead of Servo
 
-// ADC-Daten
+// ADC Data
 volatile uint16_t adcHighByte = 0;
 volatile uint16_t adcLowByte = 0;
 
-// Menü- und LCD-Steuerung
+// Menu and LCD Control
 volatile unsigned char menuStatus = 1;
 volatile unsigned char previousMenuStatus = 0;
 char displayBuffer[16];
 volatile char debounceFlag = 0;
 volatile char buttonLock = 0;
 
-// Dreieckssignal-Parameter
+// Triangle Signal Parameters
 volatile uint16_t triangleSignal1 = 0;
-volatile uint16_t triangleSignal2 = 2048; // 180 Grad Phasenverschiebung
+volatile uint16_t triangleSignal2 = 2048; // 180 degrees phase shift
 volatile double triangleStep = 1;
 volatile uint16_t maxSignalValue = 4095;
 
-// Filterparameter
-volatile double filterFrequency = 1; // Beispielinitialwert
-volatile double filterGain = 1;         // Beispielinitialwert
+// Filter Parameters
+volatile double filterFrequency = 1; // Example initial value
+volatile double filterGain = 1; // Example initial value
 
-// Aktualisierte Filterparameter
-volatile double updatedFrequency = 1; // Beispielinitialwert
-volatile double updatedGain = 1;         // Beispielinitialwert
+// Updated Filter Parameters
+volatile double updatedFrequency = 1; // Example initial value
+volatile double updatedGain = 1; // Example initial value
 
-// Filterkoeffizienten
+// Filter Coefficients
 volatile float a0 = 0.0;
 volatile float b1 = 0.0;
 
-// Ausgangswerte
+// Output Values
 volatile float previousOutput = 0.0;
 volatile float currentOutput = 0.0;
 
+// Readings for Averaging
 const int numReadings = 10; // Number of readings for averaging
 unsigned long readings[numReadings]; // Array to store readings
 int readIndex = 0; // Current index in the array
-unsigned long total = 0; // Sum of readings
-unsigned long average = 0; // Average value
 
-// SPI-Interrupt-Service-Routine
-ISR(SPI_STC_vect) {
-    // Hier könnte Code hinzugefügt werden, um auf SPI-Interrupts zu reagieren
+// New iBus Reading Variables and Definitions
+#define IBUS_BUFFSIZE 32
+#define IBUS_MAXCHANNELS 10
+
+static uint8_t ibusIndex = 0;
+static uint8_t ibus[IBUS_BUFFSIZE] = { 0 };
+static uint16_t rcValue[IBUS_MAXCHANNELS];
+
+static boolean rxFrameDone;
+
+int ch_width_1;
+int ch_width_2;
+int ch_width_3;
+int ch_width_4;
+int ch_width_5;
+int ch_width_6;
+int ch_width_7;
+int ch_width_8;
+int ch_width_9;
+int ch_width_10;
+
+ServoTimer2 ch2;  // Use ServoTimer2 instead of Servo
+
+volatile int remapped = 0; // Declare remapped as a global variable
+
+ISR(TIMER1_COMPA_vect) {
+    // Example: Start ADC conversion or handle other periodic tasks
+    // ADCSRA |= (1 << ADSC); // Start ADC conversion
 }
 
-// Funktion zum Lesen des analogen Werts von PK0
-int readAnalogPK0() {
-    ADCSRA |= (1 << ADSC); // Start der ADC-Konvertierung
-    while (ADCSRA & (1 << ADSC)); // Warten, bis die Konvertierung abgeschlossen ist
-    return ADC;
+// Define SoftwareSerial RX and TX pins
+SoftwareSerial mySerial(10, 11);  // RX = pin 10, TX = pin 11
+
+void writeDAC(uint16_t average) {
+    Serial.println("WriteDAC called");
+    PORTA &= ~(1 << PA3);  // DAC3 Chip Select aktivieren
+    SPDR = (0b00110000) | ((average >> 8) & 0x0F);  // Oberen 4 Bits senden
+    while (!(SPSR & (1 << SPIF)));
+    SPDR = average & 0xFF;  // Unteren 8 Bits senden
+    while (!(SPSR & (1 << SPIF)));
+    PORTA |= (1 << PA3);  // DAC3 Chip Select deaktivieren
 }
 
-unsigned long customPulseIn(uint8_t pin, uint8_t state, unsigned long timeout) {
-    unsigned long width = 0;
-    unsigned long start = micros();
+void readRx() {
+    Serial.println("ReadRx called");
+    rxFrameDone = false;
 
-    // Warte, bis der Pin den gewünschten Zustand erreicht
-    while (digitalRead(pin) != state) {
-        if (micros() - start > timeout) {
-            return 0; // Timeout erreicht
+    while (mySerial.available()) {
+        uint8_t val = mySerial.read();
+        Serial.print("Received byte: ");
+        Serial.println(val, HEX);
+
+        // Look for 0x2040 as start of packet
+        if (ibusIndex == 0 && val == 0x20) {
+            ibus[ibusIndex++] = val;
+        } else if (ibusIndex == 1 && val == 0x40) {
+            ibus[ibusIndex++] = val;
+        } else if (ibusIndex > 1) {
+            ibus[ibusIndex++] = val;
+        } else {
+            ibusIndex = 0;
+        }
+
+        if (ibusIndex == IBUS_BUFFSIZE) {
+            ibusIndex = 0;
+            int high = 3;
+            int low = 2;
+            for (int i = 0; i < IBUS_MAXCHANNELS; i++) {
+                rcValue[i] = (ibus[high] << 8) + ibus[low];
+                high += 2;
+                low += 2;
+            }
+
+            ch_width_1 = map(rcValue[0], 1000, 2000, 0, 180);
+            ch2.write(ch_width_1);
+
+            ch_width_2 = map(rcValue[1], 1000, 2000, 0, 180);
+            ch_width_3 = map(rcValue[2], 1000, 2000, 0, 180);
+            ch_width_4 = map(rcValue[3], 1000, 2000, 0, 180);
+            ch_width_5 = map(rcValue[4], 1000, 2000, 0, 180);
+            ch_width_6 = map(rcValue[5], 1000, 2000, 0, 180);
+            ch_width_7 = map(rcValue[6], 1000, 2000, 0, 180);
+            ch_width_8 = map(rcValue[7], 1000, 2000, 0, 180);
+            ch_width_9 = map(rcValue[8], 1000, 2000, 0, 180);
+            ch_width_10 = map(rcValue[9], 1000, 2000, 0, 180);
+
+            Serial.print("ch_width_3: ");
+            Serial.println(ch_width_3);
+
+            if (ch_width_3 > 180 || ch_width_3 < 0) {
+                Serial.println("Invalid value - Too high / Too Low");
+                return;
+            }
+
+            remapped = map(ch_width_3, 0, 180, 0, 4000);
+            Serial.print("Remapped: ");
+            Serial.println(remapped);
+            writeDAC(remapped);
+
+            rxFrameDone = true;
+            return;
         }
     }
-
-    // Startzeit des Pulses
-    unsigned long pulseStart = micros();
-
-    // Warte, bis der Pin den gegenteiligen Zustand erreicht
-    while (digitalRead(pin) == state) {
-        if (micros() - start > timeout) {
-            return 0; // Timeout erreicht
-        }
-    }
-
-    // Endzeit des Pulses
-    unsigned long pulseEnd = micros();
-
-    // Berechne die Pulsbreite
-    width = pulseEnd - pulseStart;
-
-    return width;
 }
 
-// Timer0 Compare Match A Interrupt für den Abtastzyklus
-ISR (TIMER0_COMPA_vect) {
-    // Dreieckssignal 1 berechnen
-    triangleSignal1 += triangleStep * filterGain; // Amplitude berücksichtigen
-    if (triangleSignal1 >= maxSignalValue) {
-        triangleSignal1 = maxSignalValue;
-        triangleStep = -triangleStep;
-    } else if (triangleSignal1 <= 0) {
-        triangleSignal1 = 0;
-        triangleStep = -triangleStep;
-    }
+void setup()
+{
+    Serial.begin(115200);
 
-    // Dreieckssignal 2 berechnen (180 Grad Phasenverschiebung)
-    triangleSignal2 -= triangleStep * filterGain; // Amplitude berücksichtigen
-    if (triangleSignal2 >= maxSignalValue) {
-        triangleSignal2 = maxSignalValue;
-    } else if (triangleSignal2 <= 0) {
-        triangleSignal2 = 0;
-    }
+    //Serial.println("Setup started");
+    mySerial.begin(115200);  // Initialize SoftwareSerial for iBus
+    ch2.attach(2); // Attach servo to pin 2
 
-    // Lesen des analogen Werts von PK0
-    uint16_t analogValue = readAnalogPK0();
+    // Initialize Ports
+    //Serial.println("Init ports");
+    DDRB = 0x07; // Set PB0, PB1, PB2 as outputs
+    DDRA = 0x0F; // Set PA0, PA1, PA2, and PA3 as outputs
+    DDRK &= ~(1 << PK0); // Set PK0 as input
 
-    // Übertragung des analogen Werts von PK0 zum ersten DAC
-    PORTA &= ~(1 << PA0);  // DAC1 Chip Select aktivieren
-    SPDR = (0b00010000) | ((analogValue >> 8) & 0x0F);  // Oberen 4 Bits senden
-    while (!(SPSR & (1 << SPIF)));
-    SPDR = analogValue & 0xFF;  // Unteren 8 Bits senden
-    while (!(SPSR & (1 << SPIF)));
-    PORTA |= (1 << PA0);  // DAC1 Chip Select deaktivieren
-
-    // Übertragung des Dreieckssignals 1 zum zweiten DAC
-    PORTA &= ~(1 << PA2);  // DAC2 Chip Select aktivieren
-    SPDR = (0b00010000) | ((triangleSignal1 >> 8) & 0x0F);  // Oberen 4 Bits senden
-    while (!(SPSR & (1 << SPIF)));
-    SPDR = triangleSignal1 & 0xFF;  // Unteren 8 Bits senden
-    while (!(SPSR & (1 << SPIF)));
-    PORTA |= (1 << PA2);  // DAC2 Chip Select deaktivieren
-
-
-
-    // Latch-Ausgang setzen und zurücksetzen
-    PORTA &= ~(1 << PA1);
-    PORTA |= (1 << PA1);
-}
-
-void setup() {
-    Serial.begin(9600);
-    pinMode(2, INPUT);
-
-    // Initialize the readings array to 0
-    for (int i = 0; i < numReadings; i++) {
-        readings[i] = 0;
-    }
-
-    // Initialisierung der Ports
-    DDRB = 0x07; // Setze PB0, PB1, PB2 als Ausgänge
-    DDRA = 0x0F; // Setze PA0, PA1, PA2 und PA3 als Ausgänge
-    DDRK &= ~(1 << PK0); // Setze PK0 als Eingang
-
-    // SPI-Konfiguration für Master-Modus
-    SPCR = (1 << SPIE) | (1 << SPE) | (1 << MSTR) | (1 << SPR1);
+    // SPI Configuration for Master Mode
+    //Serial.println("SPI config");
+    SPCR = (1 << SPE) | (1 << MSTR) | (1 << SPR1); // Removed SPIE
     SPSR = 0;
 
-    // ADC-Konfiguration
-    ADMUX = (1 << REFS0) | (1 << MUX2) | (1 << MUX0); // AVcc als Referenz, Kanal ADC8 (PK0)
-    ADCSRA = (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); // ADC aktivieren, Prescaler=128
+    // ADC Configuration
+    //Serial.println("ADC config");
+    ADMUX = (1 << REFS0) | (1 << MUX2) | (1 << MUX0); // AVcc as reference, Channel ADC8 (PK0)
+    ADCSRA = (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); // Enable ADC, Prescaler=128
 
-    // Timer0-Konfiguration für 1 ms Abtastrate
-    TCCR0A = (1 << WGM01);  // CTC Modus
-    TCCR0B = (1 << CS01) | (1 << CS00);   // Prescaler=64
-    OCR0A = 249;          // Zählerwert für 1 ms
-    TIMSK0 = (1 << OCIE0A); // Interrupt aktivieren
+    // Timer1 Configuration for 1 ms Sampling Rate
+    //Serial.println("Timer1 config");
+    TCCR1A = 0;
+    TCCR1B = (1 << WGM12) | (1 << CS11) | (1 << CS10); // CTC mode, prescaler=64
+    OCR1A = 249; // For 1 ms at 16 MHz: (16,000,000 / 64 / 1000) - 1 = 249
+    TIMSK1 = (1 << OCIE1A); // Enable the compare match interrupt
 
-    // Globale Interrupts aktivieren
-    sei();
-
-    // Chip Select auf Ausgang high setzen
+    // Set Chip Select to high
+    //Serial.println("Chip select (ig SPI?)");
     PORTB |= (1 << PB0);
     PORTA |= (1 << PA0);
     PORTA |= (1 << PA1);
     PORTA |= (1 << PA2);
     PORTA |= (1 << PA3);
-    PORTB &= ~(1 << PB2); // MOSI initialisieren
+    PORTB &= ~(1 << PB2); // Initialize MOSI
 
-    // Dreieckssignal-Parameter anpassen
-    triangleStep = 1; // Reduziere den Schritt um den Faktor 10
+    // Removed old interrupt attachments
+    // attachInterrupt(0, messung, CHANGE); // Removed
+
+    // Enable global interrupts
+    sei();
+    //Serial.println("Setup completed");
 }
 
-void loop() {
-    // Temporäre Variablen für die Eingabe
-    static double tempFrequency = filterFrequency;
-    static double tempGain = filterGain;
-
-    // Aktualisierte Filterparameter anwenden
-    updatedFrequency = filterFrequency;
-    updatedGain = filterGain;
-
-    // Berechnen der neuen Tiefpass-Koeffizienten
-    a0 = (1 / updatedFrequency) / (0.001 + 1 / updatedFrequency);
-    b1 = (0.001) / (0.001 + 1 / updatedFrequency);
-
-    previousOutput = currentOutput;
-
-    // Timer0-Konfiguration für die neue Frequenz
-    TCCR0B = 3 << CS00;   // Prescaler=64
-    OCR0A = (16000000 / (64 * filterFrequency)) - 1; // Zählerwert für die neue Frequenz
-
-    // Subtract the last reading from the total
-    total = total - readings[readIndex];
-
-    // Take a new reading
-    readings[readIndex] = pulseIn(2, LOW, 3000000); // Use a smaller value
-
-    // Add the new reading to the total
-    total = total + readings[readIndex];
-
-    // Advance to the next position in the array
-    readIndex = readIndex + 1;
-
-    // If we're at the end of the array, wrap around to the beginning
-    if (readIndex >= numReadings) {
-        readIndex = 0;
-    }
-
-    // Calculate the average
-    average = (total / numReadings - 6700) * 7.8;
-
-    if (average <= 6) {
-        average = 0;
-    }
-
-    // Print the average duration
-    Serial.println(average);
-
-    // Übertragung des average-Signals zum dritten DAC
-    PORTA &= ~(1 << PA3);  // DAC3 Chip Select aktivieren
-    SPDR = (0b00010000) | ((average >> 8) & 0x0F);  // Oberen 4 Bits senden
-    while (!(SPSR & (1 << SPIF)));
-    SPDR = average & 0xFF;  // Unteren 8 Bits senden
-    while (!(SPSR & (1 << SPIF)));
-    PORTA |= (1 << PA3);  // DAC3 Chip Select deaktivieren
-
+void loop()
+{
+    readRx(); // Read data using the new method
 }
