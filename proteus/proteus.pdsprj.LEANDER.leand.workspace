@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
 <WORKSPACE>
  <FRAME activewindow="0">
-  <PLACEMENT>2c0000000200000003000000ffffffffffffffffffffffffffffffff01000000180000000f060000fc030000</PLACEMENT>
+  <PLACEMENT>2c00000002000000030000000083ffff0083ffffffffffffffffffff01000000180000000f060000fc030000</PLACEMENT>
   <WINDOW type="default" module="ISIS">
    <editor metric="0" gridmajor="2540000" mode="00000000" zoom="0" scale="118" flipped="0" gridminor="254000" gridmode="16" snapidx="2" snap="254000" xcursor="0" orgmode="0" snaprange="127000">
     <world y1="-8890000" x1="-12700000" y2="8890000" x2="12700000"/>
@@ -12,22 +12,22 @@
   <WINDOW type="default" module="ARES">
    <editor metric="1" gridmajor="1000000" mode="00000000" zoom="-1" scale="207" flipped="0" gridminor="250000" gridmode="32" snapidx="3" snap="250000" xcursor="0" orgmode="0" snaprange="125000">
     <world y1="-12700000" x1="-15240000" y2="12700000" x2="15240000"/>
-    <centre x="-9640580" y="8206960"/>
+    <centre x="-9646715" y="8206960"/>
     <origin x="0" y="0"/>
    </editor>
   </WINDOW>
   <WINDOW type="VIEW3D" module="VIEW3D">
    <camera>
-    <position x="-13668278" y="1995176" z="9586235"/>
-    <focus x="-10288038" y="7351815" z="-505900"/>
-    <up x="328465" y="784294" z="526300"/>
+    <position x="-9345650" y="880618" z="7326341"/>
+    <focus x="-9345650" y="8206959" z="0"/>
+    <up x="0" y="707106" z="707106"/>
    </camera>
   </WINDOW>
  </FRAME>
  <MODULE name="ARES">
   <editor metric="1" gridmajor="1000000" mode="00000000" zoom="-1" scale="207" flipped="0" gridminor="250000" gridmode="32" snapidx="3" snap="250000" xcursor="0" orgmode="0" snaprange="125000">
    <world y1="-12700000" x1="-15240000" y2="12700000" x2="15240000"/>
-   <centre x="-9640580" y="8206960"/>
+   <centre x="-9646715" y="8206960"/>
    <origin x="0" y="0"/>
   </editor>
  </MODULE>
@@ -89,7 +89,7 @@
    <POPUP w="16" x="168" flags="0000000a" y="280" h="32" pid="7" iid="9">
     <PROPERTIES/>
    </POPUP>
-   <POPUP w="16" x="188" flags="80000000" y="300" h="32" pid="14" iid="9">
+   <POPUP w="16" x="188" flags="00000000" y="300" h="32" pid="14" iid="9">
     <PROPERTIES/>
    </POPUP>
    <POPUP w="16" x="208" flags="0000000a" y="320" h="32" pid="4" iid="9">

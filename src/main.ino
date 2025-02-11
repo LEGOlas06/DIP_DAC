@@ -71,6 +71,12 @@ Servo ch2;  // Servo on pin 2
 SoftwareSerial mySerial(10, 11);  // RX = pin 10, TX = pin 11
 int remapped;
 
+// Moving average buffer for remapped value
+const int MOVING_WINDOW = 10;
+int remappedBuffer[MOVING_WINDOW] = {0};
+int remappedBufferIndex = 0;
+bool remappedBufferInitialized = false;
+
 void readRx() {
     rxFrameDone = false;
 
@@ -111,17 +117,38 @@ void readRx() {
                 ch_width_9 = map(rcValue[8], 1000, 2000, 1000, 2000);
                 ch_width_10 = map(rcValue[9], 1000, 2000, 1000, 2000);
 
-                if (ch_width_3 > 2000 || ch_width_3 < 900) {
+                if (ch_width_1 > 2000 || ch_width_1 < 900) {
                     // Serial.println("Invalid value - Too high / Too Low");
                     break;
                 }
 
-                int newRemapped = map(ch_width_3, 1000, 2000, 0, 4000);
+                int newRemapped = map(ch_width_1, 1000, 2000, 0, 4096);
                 if (newRemapped < 0 || newRemapped > 4000) {
                     // Serial.println("Invalid value - Out of range");
                     break;
                 }
-                remapped = newRemapped;
+
+                // Update moving average buffer for remapped value
+                if (!remappedBufferInitialized) {
+                    // On the first valid reading, fill the entire buffer
+                    for (int i = 0; i < MOVING_WINDOW; i++) {
+                        remappedBuffer[i] = newRemapped;
+                    }
+                    remappedBufferInitialized = true;
+                } else {
+                    // Place the new value in the current buffer position
+                    remappedBuffer[remappedBufferIndex] = newRemapped;
+                }
+                // Increment and wrap the index
+                remappedBufferIndex = (remappedBufferIndex + 1) % MOVING_WINDOW;
+
+                // Compute the average of the last 5 values
+                long sum = 0;
+                for (int i = 0; i < MOVING_WINDOW; i++) {
+                    sum += remappedBuffer[i];
+                }
+                remapped = sum / MOVING_WINDOW;
+
                 rxFrameDone = true;
                 break;
             } else {
@@ -182,7 +209,14 @@ void setup() {
 void loop() {
     readRx(); // Read data using the new method
 
-
+    // Send filteredHighTime (ch_width_3) to DAC1
+    Serial.println(remapped);
+    PORTA &= ~(1 << PA3); // DAC1 Chip Select aktivieren
+    SPDR = (0b00110000) | ((remapped >> 8) & 0x0F); // Oberen 4 Bits senden
+    while (!(SPSR & (1 << SPIF)));
+    SPDR = remapped & 0xFF; // Unteren 8 Bits senden
+    while (!(SPSR & (1 << SPIF)));
+    PORTA |= (1 << PA3); // DAC1 Chip Select deaktivieren
 
     // Send filteredHighTime (ch_width_3) to DAC3
     Serial.println(remapped);
@@ -192,6 +226,4 @@ void loop() {
     SPDR = remapped & 0xFF; // Unteren 8 Bits senden
     while (!(SPSR & (1 << SPIF)));
     PORTA |= (1 << PA3); // DAC3 Chip Select deaktivieren
-
-    delay(10);
 }
