@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BackendCodeEditorMiscSettings">
+    <option name="/Default/RiderDebugger/RiderRestoreDecompile/RestoreDecompileSetting/@EntryValue" value="false" type="bool" />
+    <option name="/Default/Housekeeping/GlobalSettingsUpgraded/IsUpgraded/@EntryValue" value="true" type="bool" />
+    <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
+    <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexRemoved" />
+  </component>
+  <component name="CMakeProjectFlavorService">
+    <option name="flavorId" value="CMakePlainProjectFlavor" />
+  </component>
+  <component name="CMakeRunConfigurationManager">
+    <generated>
+      <config projectName="Schaltung" targetName="PlatformIO" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="89b0c690-6c16-420e-b89c-7be2cfded73e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/include/filter.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/ibus_reader.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/motor.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/utility.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/proteus/V3.pdsprj" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/filter.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/ibus_reader.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/motor.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utility.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/editor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/editor.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/README" beforeDir="false" afterPath="$PROJECT_DIR$/include/README" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [20250211, 23-08-49].pdsprj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [20250211, 23-13-14].pdsprj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [20250211, 23-13-15].pdsprj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [20250211, 23-13-35].pdsprj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [20250211, 23-13-51].pdsprj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [20250211, 23-13-52].pdsprj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [20250211, 23-13-53].pdsprj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [20250211, 23-13-54].pdsprj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [20250211, 23-13-55].pdsprj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [20250211, 23-14-24].pdsprj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [Autosaved].pdsprj" beforeDir="false" afterPath="$PROJECT_DIR$/proteus/Project Backups/V2 [Autosaved].pdsprj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proteus/V2.pdsprj" beforeDir="false" afterPath="$PROJECT_DIR$/proteus/V2.pdsprj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proteus/V2.pdsprj.LEANDER.leand.workspace" beforeDir="false" afterPath="$PROJECT_DIR$/proteus/V2.pdsprj.LEANDER.leand.workspace" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.ino" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="megaatmega2560" />
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PlatformioLocalSettings">
+    <option name="availableProjects">
+      <map>
+        <entry>
+          <key>
+            <ExternalProjectPojo>
+              <option name="name" value="Schaltung" />
+              <option name="path" value="$PROJECT_DIR$" />
+            </ExternalProjectPojo>
+          </key>
+          <value>
+            <list>
+              <ExternalProjectPojo>
+                <option name="name" value="Schaltung" />
+                <option name="path" value="$PROJECT_DIR$" />
+              </ExternalProjectPojo>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="projectSyncType">
+      <map>
+        <entry key="$PROJECT_DIR$" value="RE_IMPORT" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectApplicationVersion">
+    <option name="ide" value="CLion" />
+    <option name="majorVersion" value="2024" />
+    <option name="minorVersion" value="3.3" />
+    <option name="productBranch" value="Classic" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2tGndbez1terswLTQrgd96sdNNl" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;PlatformIO.PlatformIO.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.RadMigrateCodeStyle&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/leand/Downloads/lelander&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;clion.platformio.config&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PlatformIO" type="platformio" factoryName="PlatformIO Debug" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Schaltung" TARGET_NAME="PlatformIO" CONFIG_NAME="PlatformIO">
+      <method v="2" />
+    </configuration>
+    <configuration name="PlatformIO" type="platformio" factoryName="PlatformIO Debug" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Schaltung" TARGET_NAME="PlatformIO" CONFIG_NAME="PlatformIO">
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="89b0c690-6c16-420e-b89c-7be2cfded73e" name="Changes" comment="" />
+      <created>1739987370496</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1739987370496</updated>
+      <workItem from="1739987371962" duration="1508000" />
+      <workItem from="1740118613999" duration="1779000" />
+      <workItem from="1740120795744" duration="590000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
