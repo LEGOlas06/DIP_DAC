@@ -23,35 +23,22 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="89b0c690-6c16-420e-b89c-7be2cfded73e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/include/filter.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/include/ibus_reader.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/include/motor.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/include/utility.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/proteus/V3.pdsprj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/filter.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ibus_reader.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/motor.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utility.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+    <list default="true" id="89b0c690-6c16-420e-b89c-7be2cfded73e" name="Changes" comment="sollte jetzt wieder alles funktionieren">
       <change beforePath="$PROJECT_DIR$/.idea/editor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/editor.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/README" beforeDir="false" afterPath="$PROJECT_DIR$/include/README" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [20250211, 23-08-49].pdsprj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [20250211, 23-13-14].pdsprj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [20250211, 23-13-15].pdsprj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [20250211, 23-13-35].pdsprj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [20250211, 23-13-51].pdsprj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [20250211, 23-13-52].pdsprj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [20250211, 23-13-53].pdsprj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [20250211, 23-13-54].pdsprj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [20250211, 23-13-55].pdsprj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [20250211, 23-14-24].pdsprj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V2 [Autosaved].pdsprj" beforeDir="false" afterPath="$PROJECT_DIR$/proteus/Project Backups/V2 [Autosaved].pdsprj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proteus/V2.pdsprj" beforeDir="false" afterPath="$PROJECT_DIR$/proteus/V2.pdsprj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proteus/V2.pdsprj.LEANDER.leand.workspace" beforeDir="false" afterPath="$PROJECT_DIR$/proteus/V2.pdsprj.LEANDER.leand.workspace" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.ino" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/filter.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/filter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/ibus_reader.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/ibus_reader.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/motor.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/motor.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/utility.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/utility.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V3 [20250212, 11-32-01].pdsprj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V3 [20250212, 11-32-04].pdsprj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/proteus/Project Backups/V3 [Autosaved].pdsprj" beforeDir="false" afterPath="$PROJECT_DIR$/proteus/Project Backups/V3 [Autosaved].pdsprj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proteus/V3.pdsprj" beforeDir="false" afterPath="$PROJECT_DIR$/proteus/V3.pdsprj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/filter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/filter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ibus_reader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/ibus_reader.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/motor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/motor.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utility.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/utility.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,6 +57,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;LEGOlas06&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/LEGOlas06/DIP_DAC.git&quot;,
+    &quot;accountId&quot;: &quot;15077e74-6e05-4c9e-8ac5-d8270d97c5c2&quot;
+  }
+}</component>
   <component name="PlatformioLocalSettings">
     <option name="availableProjects">
       <map>
@@ -123,7 +122,7 @@
     &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/leand/Downloads/lelander&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Schule/DipArbeit/Simulationen/Schaltung&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -133,11 +132,26 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Schule\DipArbeit\Simulationen\Schaltung" />
+      <recent name="C:\Schule\DipArbeit\Simulationen\Schaltung\src" />
+    </key>
+  </component>
   <component name="RunManager">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
+    </configuration>
+    <configuration name="PlatformIO" type="platformio" factoryName="PlatformIO Debug" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Schaltung" TARGET_NAME="PlatformIO" CONFIG_NAME="PlatformIO">
+      <method v="2" />
+    </configuration>
+    <configuration name="PlatformIO" type="platformio" factoryName="PlatformIO Debug" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Schaltung" TARGET_NAME="PlatformIO" CONFIG_NAME="PlatformIO">
+      <method v="2" />
+    </configuration>
+    <configuration name="PlatformIO" type="platformio" factoryName="PlatformIO Debug" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Schaltung" TARGET_NAME="PlatformIO" CONFIG_NAME="PlatformIO">
+      <method v="2" />
     </configuration>
     <configuration name="PlatformIO" type="platformio" factoryName="PlatformIO Debug" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Schaltung" TARGET_NAME="PlatformIO" CONFIG_NAME="PlatformIO">
       <method v="2" />
@@ -156,11 +170,45 @@
       <updated>1739987370496</updated>
       <workItem from="1739987371962" duration="1508000" />
       <workItem from="1740118613999" duration="1779000" />
-      <workItem from="1740120795744" duration="590000" />
+      <workItem from="1740120795744" duration="3832000" />
+      <workItem from="1740158141941" duration="1023000" />
+      <workItem from="1740159520281" duration="2971000" />
+      <workItem from="1740213246233" duration="3361000" />
     </task>
+    <task id="LOCAL-00001" summary="sollte jetzt wieder alles funktionieren">
+      <option name="closed" value="true" />
+      <created>1740121607102</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1740121607102</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="sollte jetzt wieder alles funktionieren" />
+    <option name="LAST_COMMIT_MESSAGE" value="sollte jetzt wieder alles funktionieren" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/motor.cpp</url>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/ibus_reader.cpp</url>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/filter.cpp</url>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

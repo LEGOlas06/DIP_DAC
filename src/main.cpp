@@ -17,6 +17,9 @@ void setup()
 
     pinMode(11,OUTPUT);
     pinMode(12,OUTPUT);
+    pinMode(6,OUTPUT);
+    pinMode(7,OUTPUT);
+    pinMode(8,OUTPUT);
 
     // Initialize Ports
     DDRB = 0x07; // Set PB0, PB1, PB2 as outputs
@@ -70,7 +73,7 @@ void setMovement(const int linearSpeed, const int angularSpeed)
     const auto leftMotorSpeed = linearSpeed - angularSpeed;
     const auto rightMotorSpeed = linearSpeed + angularSpeed;
     setMotorSpeedDAC(0, rightMotorSpeed);
-    //setMotorSpeedDAC(1, leftMotorSpeed);
+    setMotorSpeedDAC(1, leftMotorSpeed);
 }
 
 void loop()

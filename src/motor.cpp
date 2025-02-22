@@ -1,5 +1,5 @@
 //
-// Created by tobias on 2/12/25.
+// Created by leander on 2/12/25.
 //
 #include "motor.h"
 #include <Arduino.h>
@@ -9,13 +9,13 @@ uint8_t getDirectionPin(const uint8_t dac)
     switch (dac)
     {
     case 0:
-        return 11;
+        return 6;
     case 1:
-        return 12;
+        return 7;
     case 2:
-        return 13;
+        return 8;
     default:
-        return 11;
+        return 6;
     }
 }
 
@@ -30,7 +30,8 @@ void setMotorDirection(const uint8_t dac, const MotorDirection direction)
         return;
     }
 
-    
+    Serial.println("Backward");
+    Serial.println(pin);
     digitalWrite(pin, HIGH);
 }
 
@@ -51,7 +52,7 @@ uint8_t getDACPins(const uint8_t dac)
 
 void writeDAC(const uint8_t dac, uint16_t value)
 {
-    value = constrain(value, 0, 4095);
+    value = constrain(value, 0, 4093);
 
     const uint8_t csPin = getDACPins(dac);
 
